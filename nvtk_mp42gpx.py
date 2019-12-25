@@ -5,7 +5,8 @@
 # Warranty: NONE! Use at your own risk!
 # Disclaimer: I am no programmer!
 # Description: this script will crudely extract embedded GPS data from Novatek generated MP4 files.
-#
+# Edited: added several fixes skipping strange errors using GS63H resulting in clean gpx (Michiel M)
+
 import os, struct, sys, argparse, glob
 
 gps_data = []
