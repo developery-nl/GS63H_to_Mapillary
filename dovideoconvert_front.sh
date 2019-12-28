@@ -37,7 +37,7 @@ for i in ${project_folder}/movies/*.MP4; do if [[ $i == *'B.MP4'* ]]; then echo 
 sleep 1
 
 #----------------- step 2. get geotagged images from video and gpx
-for i in ${project_folder}/movies/*.MP4; do if [[ $i == *'B.MP4'* ]]; then echo 'ignore B rear cam' $i; else echo 'geotag' $i; python2 geotag_video.py --make AZDOME --model GS63H --time_offset -1 --use_gps_start_time --image_path "/home/michiel/Afbeeldingen/Upload_Mapillary/images/"$(basename $i) --gps_trace $i.gpx --sample_interval 1.002 $i; fi; done
+for i in ${project_folder}/movies/*.MP4; do if [[ $i == *'B.MP4'* ]]; then echo 'ignore B rear cam' $i; else echo 'geotag' $i; python2 geotag_video.py --make AZDOME --model GS63H --time_offset -1 --use_gps_start_time --image_path ${project_folder}"/images/"$(basename $i) --gps_trace $i.gpx --sample_interval 1.002 $i; fi; done
 sleep 1
 
 #----------------- step 3. remove duplicates
