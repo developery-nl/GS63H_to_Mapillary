@@ -14,6 +14,8 @@ The linux tool requires Python 2.7 (v3 will not work) and following external too
 * ImageMagick to be installed and accessible at command line
 * ExifTool to be installed and accessible at command line ( sudo apt install libimage-exiftool-perl )
 * Python Imaging Library (PIL) to be installed ( python2 -m pip install pillow )
+* gpxpy ( sudo apt-get install -y python-gpxpy )
+* pynmea2 ( python2 -m pip install pynmea2 )
 * piexif ( python2 -m pip install --pre piexif )
 * exifread ( python2 -m pip install exifread )
 
