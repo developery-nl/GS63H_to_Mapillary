@@ -16,14 +16,11 @@ echo Note that dashcam GPS fix can take upto 3 minutes, so first video recording
 # image_view : valid values "car" (will crop a bit to remove dashboard), "bicycle" (no crop assuming unrestricted view)
 # brightness_contrast : used by imagemagick to generate images and correct brightness and contrast. 5x0 means +5 more brighter and 0 contrast change
 
-project_folder="/home/michiel/Afbeeldingen/GS63H_to_Mapillary"
+project_folder="/home/michiel/python-space/GS63H_to_Mapillary"
 video_format="4K"
 image_view="car"
-brightness_contrast="2x0"
-
-
-
-
+brightness_contrast="0x0"
+quality=84
 
 
 
@@ -54,19 +51,19 @@ sleep 1
 # Car recording: Video in FHD, store as cropped to 1600 × 900
 if [ $image_view="car" ] && [ $video_format="FHD" ]
 then
-  for d in ${project_folder}/images/*/; do for f in $d*.jpg; do echo $f; convert $f -shave 160x90 -quality 90 $f; done; done
+  for d in ${project_folder}/images/*/; do for f in $d*.jpg; do echo $f; convert $f -shave 160x90 -quality $quality $f; done; done
 fi
 
 # Car recording: Video in 4k [2880x2160] plays as 16:9 although 4:3 ratio when exported as image-> resample [2880x1620], store as cropped to 2560 × 1440
 if [ $image_view="car" ] && [ $video_format="4K" ]
 then
-  for d in ${project_folder}/images/*/; do for f in $d*.jpg; do echo $f; convert $f -distort barrel "0 0 -0.05" -resize 2880x1620\! -shave 160x90 -brightness-contrast 5x0 -quality 86 $f; done; done
+  for d in ${project_folder}/images/*/; do for f in $d*.jpg; do echo $f; convert $f -distort barrel "0 0 -0.05" -resize 2880x1620\! -shave 160x90 -brightness-contrast $brightness_contrast -quality $quality $f; done; done
 fi
 
 # Bicycle recording / Car when no dashboard crop needed: Video 4k, full, only stretch to 3830x2160
 if [ $image_view="bicycle" ] && [ $video_format="4K" ]
 then
-  for d in ${project_folder}/images/*/; do for f in $d*.jpg; do echo $f; convert $f -resize 3830x2160\! -brightness-contrast $brightness_contrast -quality 86 $f; done; done
+  for d in ${project_folder}/images/*/; do for f in $d*.jpg; do echo $f; convert $f -resize 3830x2160\! -brightness-contrast $brightness_contrast -quality $quality $f; done; done
 fi
 
 sleep 1
@@ -78,7 +75,13 @@ for d in ${project_folder}/images/*/; do echo $d; mv -v  $d* ${project_folder}/u
 sleep 1
 
 #----------------- step 7. combine all moved images to full trips, correct creation datetime, and remove very small trip folders
-python2 sequence_split.py ${project_folder}/upload 240 150
+python2 sequence_split.py ${project_folder}/upload 480 300
 sleep 1
 for d in ${project_folder}/upload/*/*; do exiftool '-filemodifydate<datetimeoriginal' $d; done
 for d in ${project_folder}/upload/*/; do filenum=$(ls -1q $d*.jpg | wc -l); if [ $filenum -lt 10 ]; then echo Hey not enough in $d; rm -r $d; else echo Ok enough files in $d; fi; done
+
+
+
+## additionaly crop extra from bottom
+## run following in terminal
+# for f in *.jpg; do echo $f; convert $f -crop x2000+0+0 $f; done
